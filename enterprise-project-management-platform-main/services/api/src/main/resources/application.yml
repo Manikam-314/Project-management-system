@@ -1,0 +1,26 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: enterprise-project-management-api
+  security:
+    user:
+      name: ${API_BASIC_USER:admin@aurorapm.io}
+      password: ${API_BASIC_PASSWORD:Admin@123}
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+aurora:
+  postgres:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/aurora_pm}
+  s3:
+    bucket: ${S3_BUCKET:aurora-pm}
+    region: ${AWS_REGION:us-east-1}

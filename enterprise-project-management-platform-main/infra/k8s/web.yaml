@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aurora-pm-web
+  namespace: aurora-pm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aurora-pm-web
+  template:
+    metadata:
+      labels:
+        app: aurora-pm-web
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/aishu-star/enterprise-project-management-platform-web:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: aurora-pm-config
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 200m
+              memory: 384Mi
+            limits:
+              cpu: "1"
+              memory: 768Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aurora-pm-web
+  namespace: aurora-pm
+spec:
+  selector:
+    app: aurora-pm-web
+  ports:
+    - port: 3000
+      targetPort: 3000

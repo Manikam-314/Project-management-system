@@ -1,0 +1,16 @@
+{
+  "name": "enterprise-project-management-platform",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "npm --workspace apps/web run dev",
+    "build": "npm --workspace apps/web run build",
+    "lint": "npm --workspace apps/web run lint",
+    "test": "npm --workspace apps/web run test",
+    "test:e2e": "npm --workspace apps/web run test:e2e",
+    "test:all": "npm run lint && npm run test && npm run build"
+  }
+}

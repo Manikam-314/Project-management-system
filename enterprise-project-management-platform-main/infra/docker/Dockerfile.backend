@@ -1,0 +1,25 @@
+FROM maven:3.9-eclipse-temurin-21 AS builder
+WORKDIR /app
+
+COPY pom.xml .
+COPY aurorapm-common/pom.xml aurorapm-common/
+COPY aurorapm-identity/pom.xml aurorapm-identity/
+COPY aurorapm-organization/pom.xml aurorapm-organization/
+COPY aurorapm-authorization/pom.xml aurorapm-authorization/
+COPY aurorapm-api/pom.xml aurorapm-api/
+
+RUN mvn -q -pl aurorapm-api -am dependency:go-offline
+
+COPY aurorapm-common/src aurorapm-common/src
+COPY aurorapm-identity/src aurorapm-identity/src
+COPY aurorapm-organization/src aurorapm-organization/src
+COPY aurorapm-authorization/src aurorapm-authorization/src
+COPY aurorapm-api/src aurorapm-api/src
+
+RUN mvn -q -pl aurorapm-api -am package -DskipTests
+
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=builder /app/aurorapm-api/target/aurorapm-api-0.1.0-SNAPSHOT.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aurora-pm-config
+  namespace: aurora-pm
+data:
+  REDIS_HOST: redis
+  S3_BUCKET: aurora-pm
+  AWS_REGION: us-east-1
+  NEXT_PUBLIC_API_URL: https://api.aurora-pm.example.com

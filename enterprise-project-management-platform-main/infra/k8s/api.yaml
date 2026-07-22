@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aurora-pm-api
+  namespace: aurora-pm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aurora-pm-api
+  template:
+    metadata:
+      labels:
+        app: aurora-pm-api
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/aishu-star/enterprise-project-management-platform-api:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: aurora-pm-config
+            - secretRef:
+                name: aurora-pm-secrets
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aurora-pm-api
+  namespace: aurora-pm
+spec:
+  selector:
+    app: aurora-pm-api
+  ports:
+    - port: 8080
+      targetPort: 8080

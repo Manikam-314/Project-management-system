@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# build output
+.next/
+dist/
+build/
+target/
+out/
+
+# local runtime
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+coverage/
+test-results/
+playwright-report/
+
+# IDE
+.idea/
+.vscode/
+
+# generated storage
+uploads/
+tmp/
